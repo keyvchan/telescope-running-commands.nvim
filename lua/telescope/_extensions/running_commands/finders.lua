@@ -10,7 +10,6 @@ end
 
 fb_finders.finder = function(opts)
 	opts = opts or {}
-	opts.entry_cache = {}
 	return setmetatable({
 		current_commands = vim.F.if_nil(opts.current_commands, ""),
 		_browse_commands = vim.F.if_nil(opts.browse_commands, fb_finders.browse_commands),
