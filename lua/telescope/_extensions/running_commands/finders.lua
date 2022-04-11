@@ -2,8 +2,6 @@ local fb_make_entry = require("telescope._extensions.running_commands.make_entry
 
 local finders = require("telescope.finders")
 
-local scan = require("plenary.scandir")
-
 local action_state = require("telescope.actions.state")
 local fb_finders = {}
 local has_fd = vim.fn.executable("fd") == 1
@@ -21,7 +19,7 @@ fb_finders.finder = function(opts)
 	return setmetatable({
 		cwd_to_path = opts.cwd_to_path,
 		cwd = opts.cwd_to_path and opts.path or opts.cwd, -- nvim cwd
-		path = vim.F.if_nil(opts.path, opts.cwd), -- current path for file browser
+		path = vim.F.if_nil(opts.path, ""), -- current path for file browser
 		add_dirs = vim.F.if_nil(opts.add_dirs, true),
 		hidden = vim.F.if_nil(opts.hidden, false),
 		depth = vim.F.if_nil(opts.depth, 1), -- depth for file browser

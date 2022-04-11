@@ -49,8 +49,8 @@ fb_picker.running_command = function(opts)
 	end
 
 	pickers.new(opts, {
-		prompt_title = opts.files and "Commands Avaiable",
-		results_title = opts.files and Path:new(opts.path):make_relative(cwd) .. os_sep or "Results",
+		prompt_title = "Commands Avaiable",
+		results_title = "Results",
 		finder = finder,
 		previewer = conf.file_previewer(opts),
 		sorter = conf.file_sorter(opts),

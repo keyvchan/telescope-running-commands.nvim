@@ -3,10 +3,8 @@ if not has_telescope then
 	error("This extension requires telescope.nvim (https://github.com/nvim-telescope/telescope.nvim)")
 end
 
-local fb_actions = require("telescope._extensions.running_commands.actions")
 local fb_finders = require("telescope._extensions.running_commands.finders")
 local fb_picker = require("telescope._extensions.running_commands.picker")
-local fb_utils = require("telescope._extensions.running_commands.utils")
 
 local finders = require("telescope.finders")
 local action_state = require("telescope.actions.state")
@@ -21,14 +19,21 @@ local pconf = {
 			local current_picker = action_state.get_current_picker(prompt_bufnr)
 			local finder = current_picker.finder
 			finder.files = true
-			finder.path = entry
+			finder.path = entry.value
+			local current_title = current_picker.results_border._border_win_options.title
 			local data = vim.fn.getcompletion(entry.value .. " ", "cmdline")
-			if vim.F.if_nil(data) then
-				vim.notify(vim.inspect(current_picker.results_border._border_win_options.title))
+			if vim.tbl_isempty(data) then
 				actions.close(prompt_bufnr)
+				vim.api.nvim_command(current_title .. " " .. entry.value)
 			else
 				finder = finders.new_table({ results = data })
-				fb_utils.redraw_border_title(current_picker)
+				local new_title
+				if current_title == "Results" then
+					new_title = entry.value
+				else
+					new_title = current_title .. " " .. entry.value
+				end
+				current_picker.results_border:change_title(new_title)
 				current_picker:refresh(finder, { reset_prompt = true, multi = current_picker._multi })
 			end
 		end)
@@ -80,7 +85,6 @@ return telescope.register_extension({
 	setup = fb_setup,
 	exports = {
 		running_commands = running_commands,
-		actions = fb_actions,
 		finder = fb_finders,
 		_picker = fb_picker,
 	},
