@@ -36,8 +36,8 @@ fb_picker.running_command = function(opts)
 				if vim.tbl_isempty(data) then
 					actions.close(prompt_bufnr)
 					if current_title == "Commands Avaiable" then
-						local cmd = action_state.get_current_line()
-						vim.api.nvim_command(cmd)
+						-- local cmd = finder.current_commands
+						vim.api.nvim_command(finder.current_commands)
 					else
 						vim.api.nvim_command(current_title .. " " .. entry.value)
 					end
