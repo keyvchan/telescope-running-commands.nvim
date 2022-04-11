@@ -26,12 +26,21 @@ fb_picker.running_command = function(opts)
 				local current_picker = action_state.get_current_picker(prompt_bufnr)
 				local finder = current_picker.finder
 				finder.files = true
-				finder.current_commands = entry.value
+				if entry == nil then
+					finder.current_commands = action_state.get_current_line()
+				else
+					finder.current_commands = entry.value
+				end
 				local current_title = current_picker.prompt_border._border_win_options.title
-				local data = vim.fn.getcompletion(entry.value .. " ", "cmdline")
+				local data = vim.fn.getcompletion(finder.current_commands .. " ", "cmdline")
 				if vim.tbl_isempty(data) then
 					actions.close(prompt_bufnr)
-					vim.api.nvim_command(current_title .. " " .. entry.value)
+					if current_title == "Commands Avaiable" then
+						local cmd = action_state.get_current_line()
+						vim.api.nvim_command(cmd)
+					else
+						vim.api.nvim_command(current_title .. " " .. entry.value)
+					end
 				else
 					finder = finders.new_table({ results = data })
 					local new_title
