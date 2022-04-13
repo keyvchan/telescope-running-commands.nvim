@@ -4,7 +4,7 @@ local action_state = require("telescope.actions.state")
 local fb_finders = {}
 
 fb_finders.browse_commands = function(opts)
-	local data = vim.fn.getcompletion(action_state.get_current_line(), "cmdline")
+	local data = vim.fn.getcompletion("", "cmdline")
 	return finders.new_table({ results = data })
 end
 
